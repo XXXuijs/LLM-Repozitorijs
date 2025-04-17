@@ -1,169 +1,141 @@
-# LLM-Repozitorijs
-
-# Unity 3D First-Person Shooter with Procedural Generation
+# Unity 3D Terrain Shooter with Procedural Generation from Llama
 
 ## Project Overview
 
-This project combines first-person shooter mechanics with procedural level generation to create a dynamic 3D game experience. The system includes:
+This project combines first-person shooting mechanics with procedural terrain generation and enemy AI systems. Key components include:
 
-1. First-person player controller with advanced movement
-2. Weapon and projectile system
-3. Enemy AI with chasing and attacking behaviors
-4. Procedural terrain generation using Perlin noise
+1. Advanced player movement with wall jumping
+2. Projectile-based weapon system
+3. Enemy AI with chasing behavior
+4. Perlin noise terrain generation
 5. Rule-based prefab placement system
+6. Custom level generation editor tools
 
 ## Script Documentation
 
-### 1. First-Person Player Controller (`FirstPersonShooter.cs`)
+### 1. Player Controller (`PlayerMovement.cs` + `PlayerShooting.cs`)
 
 **Features:**
-- WASD movement with walking/running
-- Mouse look with adjustable sensitivity
+- WASD movement with adjustable speed
 - Advanced jumping:
   - Ground jumps
-  - Air jumps (double/triple jump)
-  - Wall jumping
-- Weapon system:
-  - Projectile shooting
-  - Ammo management
-  - Reloading
-  - Sound effects
+  - Wall jumps
+- Physics-based movement
+- Projectile shooting system
+- Fire point targeting
 
 **Debug Logs:**
-- Movement inputs
-- Jump states (ground/air/wall)
-- Weapon firing and reloading
-- Ammo changes
+- Movement inputs and velocity
+- Jump states (ground/wall)
+- Projectile instantiation
 - Collision detection
 
-### 2. Projectile System (`Projectile.cs`)
+### 2. Enemy System (`EnemyMovement.cs` + `EnemyHealth.cs`)
 
 **Features:**
-- Physics-based movement
-- Damage application
-- Impact effects
-- Automatic cleanup
-
-**Debug Logs:**
-- Projectile creation
-- Velocity and damage values
-- Collision events
-- Enemy hits
-
-### 3. Enemy AI (`EnemyAI.cs`)
-
-**Features:**
-- Patrol behavior with waypoints
-- Player detection and chasing
-- Attack system
-- Health and damage taking
-- Death effects
-
-**Debug Logs:**
-- State changes (patrol/chase/attack)
-- Damage taken
-- Attack events
+- Player chasing behavior
+- Damage taking system
+- Health management
 - Death sequence
 
-### 4. Procedural Level Generator (`ProceduralLevelGenerator.cs`)
+**Debug Logs:**
+- Movement direction calculations
+- Damage taken events
+- Death triggers
+
+### 3. Procedural Terrain Generator (`TerrainGenerator.cs`)
 
 **Features:**
-- Perlin noise terrain generation
-- Heightmap texture support
-- Rule-based prefab placement:
-  - Height constraints
-  - Slope constraints
-  - Density control
-  - Tag requirements
-- Player spawn system
+- Perlin noise heightmap generation
+- Dynamic mesh creation
+- Configurable terrain parameters:
+  - Size
+  - Resolution
+  - Noise scale
+  - Height intensity
 
 **Debug Logs:**
-- Generation parameters
-- Prefab placement attempts
-- Placement rules validation
-- Player spawn location
+- Terrain generation start/complete
+- Vertex calculations
+- Mesh construction
 
-### 5. Prefab Placement Rules (`PrefabPlacementRule` Class)
+### 4. Prefab Placement System (`PrefabPlacer.cs`)
 
-**Configuration Options:**
-- Prefab reference
-- Maximum instances
-- Placement radius
-- Height range
-- Slope range
-- Surface alignment
-- Required tags
+**Features:**
+- Noise-based object distribution
+- Configurable spacing rules
+- Terrain-adaptive positioning
+
+**Debug Logs:**
+- Placement attempts
+- Position validation
+- Instantiation events
+
+### 5. Level Generator Editor (`LevelGeneratorEditor.cs`)
+
+**Features:**
+- Custom Unity editor window
+- Combined terrain + object controls
+- One-click generation
+- Real-time parameter adjustment
 
 ## Setup Instructions
 
 1. **Player Setup:**
-   - Attach `FirstPersonShooter` to player GameObject
-   - Assign camera and weapon muzzle transforms
-   - Configure movement and weapon settings
+   - Attach both `PlayerMovement` and `PlayerShooting` scripts
+   - Create required child objects:
+     - "FirePoint" (for shooting)
+     - "WallCheck" (for wall jumps)
+   - Assign projectile prefab
 
-2. **Projectile Setup:**
-   - Create projectile prefab with:
-     - Rigidbody
-     - Collider (trigger)
-     - `Projectile` script
-     - Visual mesh
+2. **Enemy Setup:**
+   - Attach `EnemyMovement` and `EnemyHealth` scripts
+   - Assign player reference
+   - Set health values
 
-3. **Enemy Setup:**
-   - Create enemy prefab with:
-     - NavMeshAgent
-     - Collider
-     - `EnemyAI` script
-     - Assign "Enemy" tag
-   - Set patrol points if needed
+3. **Terrain Setup:**
+   - Create empty GameObject
+   - Attach `TerrainGenerator` script
+   - Configure size/resolution parameters
 
-4. **Level Generation:**
-   - Add `ProceduralLevelGenerator` to empty GameObject
-   - Configure terrain size and noise settings
-   - Set up prefab placement rules
-   - Assign player prefab
+4. **Prefab Placement:**
+   - Attach `PrefabPlacer` to same GameObject
+   - Assign prefabs and spacing values
 
-5. **Navigation:**
-   - Bake NavMesh (Window > AI > Navigation)
-   - Mark walkable areas
+5. **Editor Tools:**
+   - Access via `Tools > Level Generator`
+   - Adjust all parameters in one window
 
 ## Debugging Tools
 
-All scripts include comprehensive debug logging that displays in the Unity Console:
+All scripts include comprehensive debug logging:
 
-- Player movement states
-- Weapon firing events
-- Enemy behavior transitions
-- Projectile collisions
-- Prefab placement results
+- Player:
+  - Movement states
+  - Jump availability
+  - Shooting events
+
+- Enemies:
+  - Chase behavior
+  - Health changes
+  - Death sequence
+
+- Terrain:
+  - Generation progress
+  - Vertex calculations
+  - Mesh construction
 
 Visual debug helpers:
-- Ground check spheres
-- Wall detection indicators
-- Enemy detection ranges
-- Terrain bounds visualization
+- Ground check indicators
+- Wall detection markers
+- Enemy path visualization
+- Terrain bounds display
 
 ## Customization Guide
 
 ### Movement Tuning:
-- Adjust `walkSpeed`, `runSpeed` in `FirstPersonShooter`
-- Modify jump forces (`jumpForce`, `wallJumpVerticalForce`)
-- Tweak mouse sensitivity
-
-### Combat Balancing:
-- Change `projectileDamage` in player controller
-- Adjust enemy `maxHealth` and `attackDamage`
-- Modify fire rates and ammo counts
-
-### Level Generation:
-- Experiment with Perlin noise `scale` and `heightMultiplier`
-- Create custom placement rules for different prefabs
-- Adjust density through `maxCount` and `placementRadius`
-
-## Credits
-
-This system was developed as a comprehensive Unity solution combining:
-- Advanced first-person controls
-- Robust AI behaviors
-- Sophisticated procedural generation
-- Detailed debugging tools
-
+```csharp
+// In PlayerMovement.cs
+public float moveSpeed = 10f;       // Base movement speed
+public float jumpForce = 10f;       // Jump power
+public float gravity = -9.81f;      // Gravity strength
