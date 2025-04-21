@@ -1,4 +1,4 @@
-# Unity 3D First-Person Shooter with Procedural Generation from Qwen 
+# Unity 3D First-Person Shooter with Procedural Generation from DeepSeek
 
 ## Project Overview
 
